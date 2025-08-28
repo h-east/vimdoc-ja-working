@@ -41738,6 +41738,11 @@ Ex コマンド: ~
 - |CmdlineLeave| は、|v:char| をコマンドラインからの終了の原因となった文字に設
   定する。
 - |min()|/|max()| はすべての比較可能なデータ型を処理できる。
+- Vim は、すべての端末の OSC 値に対して |TermResponseAll| 自動コマンドをトリ
+  ガーする。
+- Vim には、端末の OSC 応答を解析し、"background" または "foreground" 値で
+  |TermResponseAll| をトリガーできる $VIMRUNTIME/plugins/colorresp.vim が同梱
+  されている。
 
 プラットフォーム固有 ~
 - MS-Windows: "\Windows" や "/Windows" などのパスは、相対パスではなく (現在の
