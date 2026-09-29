@@ -1,4 +1,4 @@
-*builtin.txt*	For Vim バージョン 9.2.  Last change: 2026 Sep 14
+*builtin.txt*	For Vim バージョン 9.2.  Last change: 2026 Sep 25
 
 
 		  VIM リファレンスマニュアル	by Bram Moolenaar
@@ -5171,7 +5171,7 @@ getregionpos({pos1}, {pos2} [, {opts}])			*getregionpos()*
 		|getregion()| と同じだが、{pos1} と {pos2} によって囲まれたバッ
 		ファのテキストセグメントを表す位置のリストを返す。
 		セグメントは、各行の位置のペアである: >
-			[[{start_pos}, {end_pos}], ...]
+			[[{startpos}, {endpos}], ...]
 <
 		位置は 4 つの数値の |List| である:
 		    [bufnum, lnum, col, off]
@@ -5197,9 +5197,9 @@ getregionpos({pos1}, {pos2} [, {opts}])			*getregionpos()*
 
 			bounds		|TRUE| の場合、領域の外側の境界のみを
 					単一のペアとして返す: >
-						[[{start_pos}, {end_pos}]]
-<					{start_pos} は領域の最初の行における開
-					始位置、{end_pos} は最後の行における終
+						[[{startpos}, {endpos}]]
+<					{startpos} は領域の最初の行における開
+					始位置、{endpos} は最後の行における終
 					了位置である。その間の行は処理の対象と
 					ならないため、大きな領域を扱う場合には
 					るかに高速に動作する。
@@ -5215,8 +5215,8 @@ getregionpos({pos1}, {pos2} [, {opts}])			*getregionpos()*
 		のではなく、その領域の対角線を表すことになる点に注意。ブロック
 		単位の領域の場合、これらはブロックの隅ではなく、最初の行の開始
 		位置と最後の行の終了位置となる。同様に、最初の行が空で "eol"
-		が |FALSE| の場合、{start_pos} の "col" は 0 になるが、
-		{end_pos} は必ずしもそうとは限らない。
+		が |FALSE| の場合、{startpos} の "col" は 0 になるが、{endpos}
+		は必ずしもそうとは限らない。
 
 		|method| としても使用できる: >
 			getpos('.')->getregionpos(getpos("'a"))
@@ -9355,6 +9355,9 @@ screenpos({winid}, {lnum}, {col})			*screenpos()*
 		|conceal| 機能はここでは無視され、列の数字は 'conceallevel' が
 		0のときと同じになる。カーソルを正しい位置に設定して
 		|screencol()| を使うことで |conceal| を考慮した値を取得できる。
+		行の上の |virtual-text| はそれ専用の画面行を占有し、行数として
+		カウントされる。そのため、その行の最初の文字は、その下の画面行
+		に配置されることになる。
 		位置が閉じた折り畳みの中である場合、最初の文字の画面上の位置が
 		返され、{col} は使用されない。
 		{winid} が無効な場合は空の辞書を返す。
@@ -9897,6 +9900,9 @@ setcellwidths({list})					*setcellwidths()*
 		内でカーソルを移動して、端末のセル幅が各絵文字について Vim が
 		認識している内容とマッチするかどうかを確認する。正しく見えない
 		場合は、{list} 引数を調整する必要がある。
+
+		後で上書きした設定を取得するには、|getcellwidths()| が使用でき
+		る。
 
 		戻り値の型: void
 
@@ -12451,6 +12457,11 @@ virtcol({expr} [, {list} [, {winid}]])			*virtcol()*
 		われる。
 		現在のモードに対して仮想編集がオンのときは、行末を越えた位置が
 		返ってくることもある。'virtualedit' も参照。
+
+		行の上部に表示される |virtual-text| は、それ専用の画面行を占有
+		し、折り返された行と同様にカウントされる。つまり、ウィンドウの
+		幅が 80 桁の場合、その行の先頭文字は仮想桁の 81 桁目に位置する
+		ことになる。
 
 		{list} が存在し、非ゼロの場合、virtcol() は、文字が占める最初
 		と最後のスクリーン位置を含むリストを返す。
